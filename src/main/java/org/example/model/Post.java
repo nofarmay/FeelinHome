@@ -26,6 +26,11 @@ public class Post {
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id", nullable = false)
+    private Event event;
+
     public Post() {
         this.createdAt = new Date();
     }
@@ -45,6 +50,14 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     public String getRegistrationCode() {

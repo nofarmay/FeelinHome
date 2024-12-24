@@ -33,11 +33,11 @@ public class User {
     @OneToMany(mappedBy = "creator")
     private Set<Event> createdEvents = new HashSet<>();
 
+    @OneToMany(mappedBy = "creator")
+    private Set<Post> posts = new HashSet<>();
+
     @ManyToMany(mappedBy = "participants")
     private Set<Event> attendingEvents = new HashSet<>();
-
-    @OneToMany(mappedBy = "author")
-    private Set<Post> posts = new HashSet<>();
 
     public User() {
         this.createdAt = new Date();
@@ -86,6 +86,10 @@ public class User {
         return address;
     }
 
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
     public String getProfilePicture() {
         return profilePicture;
     }
@@ -100,10 +104,6 @@ public class User {
 
     public Set<Event> getAttendingEvents() {
         return attendingEvents;
-    }
-
-    public Set<Post> getPosts() {
-        return posts;
     }
 
     public void setUserId(Long userId) {

@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface EventRSVPRepository extends JpaRepository<EventRSVP, Long> {
-    Optional<EventRSVP> findByEventIdAndRegistrationCode(Long eventId, String registrationCode);
+    Optional<EventRSVP> findByEvent_EventIdAndRegistrationCode(Long eventId, String registrationCode);
 }

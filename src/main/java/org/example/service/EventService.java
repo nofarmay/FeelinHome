@@ -60,7 +60,7 @@ public class EventService {
     }
 
     public void cancelRegistration(Long eventId, String registrationCode) {
-        Optional<EventRSVP> rsvp = rsvpRepository.findByEventIdAndRegistrationCode(eventId, registrationCode);
+        Optional<EventRSVP> rsvp = rsvpRepository.findByEvent_EventIdAndRegistrationCode(eventId, registrationCode);;
         rsvp.ifPresent(rsvpRepository::delete);
     }
 }
