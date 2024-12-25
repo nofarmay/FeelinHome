@@ -60,6 +60,10 @@ public class User {
         return userId;
     }
 
+    public boolean isCoordinator() {
+        return isCoordinator;
+    }
+
     public String getUsername() {
         return username;
     }

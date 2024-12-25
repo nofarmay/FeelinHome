@@ -4,9 +4,9 @@ import org.example.model.Event;
 import org.example.model.EventRSVP;
 import org.example.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -21,12 +21,20 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<List<Event>> getAllEvents() {
-        return ResponseEntity.ok(eventService.getAllEvents());
+        List<Event> events = eventService.getAllEvents();
+        System.out.println("Returning " + events.size() + " events from the controller");
+        events.forEach(event -> System.out.println("Event: " + event.getTitle()));
+        return ResponseEntity.ok(events);
     }
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-        return ResponseEntity.ok(eventService.createEvent(event));
+    public ResponseEntity<Event> createEvent(@RequestBody Event event, @RequestParam String registrationCode) {
+        // בדיקה אם המשתמש יוצר האירוע הוא רכז והקוד רישום שלו תקין
+        if (event.getCreator().isCoordinator() && event.getCreator().getRegistrationCode().equals(registrationCode)) {
+            return ResponseEntity.ok(eventService.createEvent(event));
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 
     @PutMapping("/{id}")
@@ -40,7 +48,9 @@ public class EventController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
+        System.out.println("קיבלתי בקשת מחיקה לאירוע עם ID: " + id);
         eventService.deleteEvent(id);
+        System.out.println("אירוע עם ID: " + id + " נמחק בהצלחה");
         return ResponseEntity.ok().build();
     }
 

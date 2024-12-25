@@ -2,12 +2,14 @@ package org.example.service;
 
 import org.example.model.Event;
 import org.example.model.EventRSVP;
+import org.example.model.EventStatus;
 import org.example.repository.CommunityActivityScoreRepository;
 import org.example.repository.EventRSVPRepository;
 import org.example.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +33,23 @@ public class EventService {
     }
 
     public Event createEvent(Event event) {
+        // בדיקה שהיוצר הוא אכן רכז
+        if (event.getCreator() == null || !event.getCreator().isCoordinator()) {
+            throw new RuntimeException("רק רכזים יכולים ליצור אירועים");
+        }
+
+        // בדיקה שתאריך האירוע לא בעבר
+        if (event.getStartDate().before(new Date())) {
+            throw new IllegalArgumentException("לא ניתן ליצור אירוע בתאריך עבר");
+        }
+
+        // הגדרת סטטוס התחלתי (אם השדה קיים במודל Event)
+        event.setStatus(EventStatus.OPEN);
+
+        // אתחול מספר המשתתפים הנוכחי ל-0 (אם השדה קיים במודל Event)
+        event.setCurrentParticipants(0);
+
+        // שמירת האירוע
         return eventRepository.save(event);
     }
 
@@ -42,6 +61,7 @@ public class EventService {
         }
         return null;
     }
+
 
     public void deleteEvent(Long id) {
         eventRepository.deleteById(id);

@@ -29,8 +29,9 @@ public class Event {
     @Column(nullable = false)
     private String location;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status = "OPEN";
+    private EventStatus status = EventStatus.OPEN;
 
     @Column(name = "max_participants")
     private Integer maxParticipants;
@@ -38,8 +39,8 @@ public class Event {
     @Column(name = "current_participants")
     private Integer currentParticipants = 0;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "creator_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
     private User creator;
 
     @ManyToMany
@@ -55,13 +56,16 @@ public class Event {
 
     public Event() {}
 
-    public Event(String title, Date startDate, Date endDate, String location, User creator) {
+    public Event(String title, Date startDate, Date endDate, String location, User creator, String description) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.location = location;
         this.creator = creator;
+        this.description = description;
     }
+
+    // Getters and setters
 
     public Long getEventId() {
         return eventId;
@@ -111,11 +115,11 @@ public class Event {
         this.location = location;
     }
 
-    public String getStatus() {
+    public EventStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(EventStatus status) {
         this.status = status;
     }
 
@@ -164,7 +168,7 @@ public class Event {
     }
 
     public boolean canRegister() {
-        return status.equals("OPEN") && !isFullyBooked();
+        return status == EventStatus.OPEN && !isFullyBooked();
     }
 
     public void addParticipant(User user) {

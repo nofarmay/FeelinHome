@@ -27,12 +27,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody Post post, @RequestParam String registrationCode) {
-        // בדיקה אם המשתמש יוצר הפוסט הוא אדמין והקוד רישום שלו תקין
-        if (post.getCreator().isAdmin() && post.getCreator().getRegistrationCode().equals(registrationCode)) {
-            return ResponseEntity.ok(postService.createPost(post, registrationCode));
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        return ResponseEntity.ok(postService.createPost(post, registrationCode));
     }
 
     @PutMapping("/{id}")

@@ -48,6 +48,8 @@ public class PostService {
         return postRepository.findById(id);
     }
 
+
+
     public Post updatePost(Long id, Post updatedPost) {
         if (postRepository.existsById(id)) {
             updatedPost.setId(id);
