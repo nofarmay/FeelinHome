@@ -51,8 +51,6 @@ public class Event {
     )
     private Set<User> participants = new HashSet<>();
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private Set<Post> posts = new HashSet<>();
 
     public Event() {}
 
@@ -155,13 +153,6 @@ public class Event {
         this.participants = participants;
     }
 
-    public Set<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(Set<Post> posts) {
-        this.posts = posts;
-    }
 
     public boolean isFullyBooked() {
         return maxParticipants != null && currentParticipants >= maxParticipants;
